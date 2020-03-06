@@ -1,0 +1,6 @@
+{
+  "name": "tpcds-gcs",
+  "options": {
+    "allow-unauthenticated": false
+  }
+}
