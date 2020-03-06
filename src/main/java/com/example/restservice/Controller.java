@@ -40,6 +40,8 @@ public class Controller {
 
 		options.scale = Double.parseDouble(scale);
 
+		System.out.println("Starting generation with scale ["+ scale +"] to bucket ["+ bucketName +"]");
+
 		Session session = options.toSession();
 
 
