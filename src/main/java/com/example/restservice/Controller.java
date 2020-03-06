@@ -26,8 +26,8 @@ public class Controller {
 
 	@GetMapping("/run")
 	public String run(
-                    @RequestParam(value = "scale", defaultValue = "1") String scale,
-                    @RequestParam(value = "bucket") String bucketName
+                    @RequestParam String scale,
+                    @RequestParam String bucket
 					  ) throws IOException {
 
 
@@ -40,7 +40,7 @@ public class Controller {
 
 		options.scale = Double.parseDouble(scale);
 
-		System.out.println("Starting generation with scale ["+ scale +"] to bucket ["+ bucketName +"]");
+		System.out.println("Starting generation with scale ["+ scale +"] to bucket ["+ bucket +"]");
 
 		Session session = options.toSession();
 
@@ -70,7 +70,7 @@ public class Controller {
                     try {
                     	currentFileCount.getAndIncrement();
 						System.out.println("Starting uploading of file " + f.toString() + " (" + currentFileCount + " of " + tablesToGenerate.size() + ")" );
-						uploadFile(f, storage, bucketName);
+						uploadFile(f, storage, bucket);
 						System.out.println("Ended generation of table " + f.toString());
 						System.out.println("-----------------------------------------------------------------");
                     } catch (IOException e) {
@@ -83,7 +83,7 @@ public class Controller {
         	return "Error in uploading files to GCS";
 		}
 
-		return "Successfully created " + currentTableCount + " files on " + bucketName;
+		return "Successfully created " + currentTableCount + " files on " + bucket;
 	}
 
 	private static void uploadFile(Path path, Storage storage, String bucketName) throws IOException {
