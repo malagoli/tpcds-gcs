@@ -52,6 +52,8 @@ public class Controller {
 					System.out.println("Starting generation of table " + table + " (" + currentTableCount + " of " + tablesToGenerate.size() + ")" );
 					tableGenerator.generateTable(table);
 					System.out.println("Ended generation of table " + table);
+
+
 					System.out.println("-----------------------------------------------------------------");
 				});
 
@@ -83,7 +85,7 @@ public class Controller {
 	}
 
 	private static void uploadFile(Path path, Storage storage, String bucketName) throws IOException {
-        String fileName = path.toString();
+        String fileName = path.getFileName().toString();
 
 	    FileInputStream fileStream=new FileInputStream(fileName);
 
