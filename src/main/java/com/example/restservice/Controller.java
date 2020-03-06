@@ -85,9 +85,7 @@ public class Controller {
 	}
 
 	private static void uploadFile(Path path, Storage storage, String bucketName) throws IOException {
-        String fileName = path.getFileName().toString();
-
-	    FileInputStream fileStream=new FileInputStream(fileName);
+	    FileInputStream fileStream=new FileInputStream(path.toString());
 
         DateTimeFormatter dtf = DateTimeFormat.forPattern("-YYYY-MM-dd-HHmmssSSS");
         DateTime dt = DateTime.now(DateTimeZone.UTC);
@@ -95,7 +93,7 @@ public class Controller {
 
         storage.create(
                 BlobInfo
-                        .newBuilder(bucketName, fileName + dtString )
+                        .newBuilder(bucketName, path.getFileName().toString() + dtString )
                         .build(),
                 fileStream
         );
