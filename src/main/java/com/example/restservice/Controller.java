@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,13 +28,22 @@ public class Controller {
 	@GetMapping("/run")
 	public String run(
                     @RequestParam String scale,
-                    @RequestParam String bucket
+                    @RequestParam String bucket,
+					@RequestParam(required = false) String tableName
 					  ) throws IOException {
 
 
 
 
-		List<Table> tablesToGenerate = Table.getBaseTables();
+		List<Table> tablesToGenerate;
+		if(tableName != null) {
+			tablesToGenerate = new ArrayList<>();
+			tablesToGenerate.add(Table.getTable(tableName));
+		} else {
+			tablesToGenerate = Table.getBaseTables();
+
+		}
+
 		Options options = new Options();
 		options.directory = "/tmp";
 		options.overwrite = true;
