@@ -29,7 +29,9 @@ public class Controller {
 	public String run(
                     @RequestParam String scale,
                     @RequestParam String bucket,
-					@RequestParam(required = false) String tableName
+					@RequestParam(required = false) String tableName,
+					@RequestParam(required = false) String directory
+
 					  ) throws IOException {
 
 
@@ -80,7 +82,7 @@ public class Controller {
                     try {
                     	currentFileCount.getAndIncrement();
 						System.out.println("Starting uploading of file " + f.toString() + " (" + currentFileCount + " of " + tablesToGenerate.size() + ")" );
-						uploadFile(f, storage, bucket);
+						uploadFile(f, storage, bucket, directory);
 						System.out.println("Ended generation of table " + f.toString());
 						System.out.println("-----------------------------------------------------------------");
                     } catch (IOException e) {
@@ -96,16 +98,21 @@ public class Controller {
 		return "Successfully created " + currentTableCount + " files on " + bucket;
 	}
 
-	private static void uploadFile(Path path, Storage storage, String bucketName) throws IOException {
+	private static void uploadFile(Path path, Storage storage, String bucketName, String directory) throws IOException {
 	    FileInputStream fileStream=new FileInputStream(path.toString());
 
         DateTimeFormatter dtf = DateTimeFormat.forPattern("-YYYY-MM-dd-HHmmssSSS");
         DateTime dt = DateTime.now(DateTimeZone.UTC);
         String dtString = dt.toString(dtf);
 
+        String fullPath = path.getFileName().toString() + dtString;
+        if(directory != null) {
+        	fullPath = directory + "/" + fullPath;
+		}
+
         storage.create(
                 BlobInfo
-                        .newBuilder(bucketName, path.getFileName().toString() + dtString )
+                        .newBuilder(bucketName,  fullPath)
                         .build(),
                 fileStream
         );
